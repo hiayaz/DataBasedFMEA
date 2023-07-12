@@ -1,0 +1,27 @@
+function [pos DM]=PartABAC(DM,W,t,b,cb)   
+        i=b;
+        p=t-1;
+        for k=t:(b-1)
+            rg1=1;%relative goodness for i to k
+            rg2=1;%relative goodness for k to i
+            for j=1:size(W,2)
+                if cb(1,j)==1
+                    rg1=rg1*(((DM(k,j)+1)/(DM(i,j)+1))^W(j));
+                    rg2=rg2*(((DM(i,j)+1)/(DM(k,j)+1))^W(j));
+                else
+                    rg1=rg1*(((DM(i,j)+1)/(DM(k,j)+1))^W(j));
+                    rg2=rg2*(((DM(k,j)+1)/(DM(i,j)+1))^W(j));
+                end                                    
+            end
+            if rg2>rg1
+                p=p+1;
+                if p~=k
+                    DM=swap(DM,p,k);
+                      transpose(DM(:,6))
+                end
+            end 
+        end         
+    DM=swap(DM,p+1,b);
+    transpose(DM(:,6))
+    pos=p+1;
+end
